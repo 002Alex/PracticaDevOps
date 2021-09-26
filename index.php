@@ -1,5 +1,5 @@
 
-
+<?php include('conexion.php'); ?>
 <?php include("template/head.php"); ?>
 <?php include("template/nav.php"); ?>
 
@@ -11,6 +11,13 @@
             <div class="row">
                 <div class="col">
 
+                <?php if (isset($_SESSION['message'])) { ?>
+                        <div class="alert alert-<?= $_SESSION['message_type']; ?> alert-dismissible fade show" role="alert">
+                            <?= $_SESSION['message'] ?>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    <?php session_unset();
+                    } ?>
                  
                     <div class="card shadow mb-3">
                         <div class="card-body">
@@ -81,7 +88,30 @@
                         </tr>
                     </thead>
                     <tbody>
-                        
+                    <?php
+                        $query = "SELECT * FROM empleados";
+                        $res = mysqli_query($conn, $query);
+
+                        while ($fila = mysqli_fetch_array($res)) { ?>
+                            <tr>
+                                <td><?php echo $fila['id'] ?></td>
+                                <td><?php echo $fila['nombre'] ?></td>
+                                <td><?php echo $fila['correo'] ?></td>
+                                <td><?php echo $fila['fecha'] ?></td>
+                                <td>
+                                    <a href="modificar.php?id=<?php echo $fila['id'] ?>" class=" btn-lg btn-outline-success">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+
+                                    <a href="eliminar.php?id=<?php echo $fila['id'] ?>" class=" btn-lg btn-outline-danger">
+                                        <i class="fas fa-trash"></i>
+
+                                    </a>
+                                </td>
+
+                            </tr>
+
+                        <?php }  ?>
                     </tbody>
                 </table>
             </div>
